@@ -1,10 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body></body>
+    <title>Exercises — Complete Intro to Vue 3</title>
+</head>
+<body style="background-color: black; color: white">
+    <div id="app">
+        <h1> Hello, {{ showName.toUpperCase()}}</h1>
+        <ul v-if="characters.length > 0">
+            <li v-for="character in characters">
+                {{ character.name }} - {{ character.title }} - {{ character.race }} - {{ character.age }} years old
+            </li>
+        </ul>
+        <ul v-else>No characters fetched.</ul>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const { createApp } = Vue
+        const showName = "World of Warcraft"
+
+        const app = createApp({
+            data: () => ({
+                message: "Hello, it works!",
+                listOfNumbers: [1, 2, 3, 4, 5],
+                showName: showName,
+                characters: [
+                    {name: "Alleria Windrunner", title: null, race: "Void Elf", age: 3000},
+                    {name: "Sylvanas Windrunner", title: null, race: "Darkfallen / Banshee / Undead High Elf", age: 2800},
+                    {name: "Arator", title: "The Redeemer", race: "Half-Elf / Half-Human", age: 40},
+                    {name: "Turalyon", title: "High Exarch", race: "Human (Lightforged)", age: 40},
+                ]
+            })
+
+        })
+
+        app.mount('#app')
+    </script>
+</body>
 </html>
