@@ -35,11 +35,14 @@
             return Math.ceil(minimumAgeYearsFromSource + yearsPassed)
         };
 
-        let calculateImaginaryNow = (imaginaryAgeYears, imaginaryDobFromSource) => {
-            // Provided there are 365/366 days in a year on both Earth and an imaginary world.
-            let date = new Date(imaginaryDobFromSource)
-            date.setFullYear(date.getFullYear() + imaginaryAgeYears)
-            return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+        let calculateFictionalNow = (fictionalDob, ageAtSourceDate, realWorldSourceDate) => {
+            // Fictional date at the real-world source date = DOB + age at that time
+            let fictionalRef = new Date(fictionalDob)
+            fictionalRef.setFullYear(fictionalRef.getFullYear() + ageAtSourceDate)
+            // Add real-world time elapsed since the source date
+            let msElapsed = new Date() - new Date(realWorldSourceDate)
+            let fictionalNow = new Date(fictionalRef.getTime() + msElapsed)
+            return fictionalNow.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
         }
 
         // const imaginaryDobAlleriaFromSource = new Date('February 20, 473') // source (creation date unknown; non-canon): https://losteventidestudios.com/wow/index.php/Characters/AlleriaWindrunner
@@ -50,16 +53,16 @@
         // let calculatedAgeAlleriaYears = Math.ceil(minimumAgeAlleriaYearsFromSource + yearsPassed);
 
         // Should be 3001+
-        calculatedAgeAlleriaYears = calculatedAge(3000, 'December 2, 2025')
+        calculatedAgeYearsAlleria = calculatedAge(3000, 'December 2, 2025')
 
         // Configuration object
         const app = createApp({
             data: () => ({
                 message: "Hello, it works!",
                 listOfNumbers: [1, 2, 3, 4, 5],
-                showName: `${showName}, Azeroth time: ${calculateImaginaryNow(calculatedAgeAlleriaYears, 'February 20, 473')}` ,
+                showName: `${showName}, Azeroth time: ${calculateFictionalNow('February 20, 473', 3000, 'December 2, 2025')}` ,
                 characters: [
-                    {name: "Alleria Windrunner", title: null, race: "Void Elf", dob: 'February 20, 473', age: calculatedAgeAlleriaYears},
+                    {name: "Alleria Windrunner", title: null, race: "Void Elf", dob: 'February 20, 473', age: calculatedAgeYearsAlleria},
                     {name: "Sylvanas Windrunner", title: null, race: "Darkfallen / Banshee / Undead High Elf", age: null}, // age 2800
                     {name: "Arator", title: "The Redeemer", race: "Half-Elf / Half-Human", age: null}, // age 40
                     {name: "Turalyon", title: "High Exarch", race: "Human (Lightforged)", age: null}, // age 40
