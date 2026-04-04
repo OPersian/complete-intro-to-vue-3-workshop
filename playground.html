@@ -15,8 +15,7 @@
         <div>
             <label for="incrementAmount">Increment by:</label>
             <input id="incrementAmount" type="number"
-                   v-bind:value="incrementAmount"
-                   v-on:input="changeIncrementAmount"
+                   v-model="incrementAmount"
             />
         </div>
 
@@ -50,9 +49,6 @@
           }
         },
         methods: {
-            changeIncrementAmount(event) {
-                this.incrementAmount = Number(event.target.value)
-            },
             incrementCount() {
                 this.count += this.incrementAmount
                 console.log(this.count)
