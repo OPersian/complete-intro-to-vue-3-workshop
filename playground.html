@@ -7,25 +7,42 @@
     <title>Playground — Complete Intro to Vue 3</title>
   </head>
   <body style="background-color: black; color: white">
-    <h1>Counter App</h1>
     <div id="app1">
+        <h1>Counter</h1>
+        <p>{{count}}</p>
+        <button v-on:click="incrementCount">Increment Count</button>
+        <hr />
+
+        <h1>Numbers List</h1>
         <p v-if="message.length % 2 === 0">Even: {{ message.toUpperCase()}}</p>
         <p v-else>Odd: {{ message}}</p>
         <ul>
             <li v-for="number in listOfNumbers">{{ number * Math.random() }}</li>
         </ul>
+        <hr />
+
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
       const { createApp } = Vue
 
+      let initialCount = 0
+
       // Configuration object
       const app = createApp({
+        // Vue makes every property in this object reactive — when it changes, the HTML auto-updates.
         data() {
           return {
+            count: initialCount,
             message: "Hello, it works!",
             listOfNumbers: [1, 2, 3, 4, 5]
           }
+        },
+        methods: {
+            incrementCount() {
+                this.count++
+                console.log(this.count)
+            }
         }
 
       })
