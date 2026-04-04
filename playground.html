@@ -11,6 +11,15 @@
         <h1>Counter</h1>
         <p>{{count}}</p>
         <button v-on:click="incrementCount">Increment Count</button>
+
+        <div>
+            <label for="incrementAmount">Increment by:</label>
+            <input id="incrementAmount" type="number"
+                   v-bind:value="incrementAmount"
+                   v-on:input="changeIncrementAmount"
+            />
+        </div>
+
         <hr />
 
         <h1>Numbers List</h1>
@@ -27,6 +36,7 @@
       const { createApp } = Vue
 
       let initialCount = 0
+      let initialIncrementAmount = 8
 
       // Configuration object
       const app = createApp({
@@ -34,13 +44,17 @@
         data() {
           return {
             count: initialCount,
+            incrementAmount: initialIncrementAmount,
             message: "Hello, it works!",
             listOfNumbers: [1, 2, 3, 4, 5]
           }
         },
         methods: {
+            changeIncrementAmount(event) {
+                this.incrementAmount = Number(event.target.value)
+            },
             incrementCount() {
-                this.count++
+                this.count += this.incrementAmount
                 console.log(this.count)
             }
         }
