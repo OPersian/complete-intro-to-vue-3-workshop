@@ -6,5 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Playground — Complete Intro to Vue 3</title>
   </head>
-  <body></body>
+  <body style="background-color: black; color: white">
+    <h1> Hello, Frontend Masters!</h1>
+    <div id="app">
+        <p v-if="message.length % 2 === 0">Even: {{ message.toUpperCase()}}</p>
+        <p v-else>Odd: {{ message}}</p>
+        <ul>
+            <li v-for="number in listOfNumbers">{{ number * Math.random() }}</li>
+        </ul>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp } = Vue
+
+      const app = createApp({
+        data() {
+          return {
+            message: "Hello, it works!",
+            listOfNumbers: [1, 2, 3, 4, 5]
+          }
+        }
+
+      })
+
+      app.mount('#app')
+    </script>
+  </body>
 </html>
