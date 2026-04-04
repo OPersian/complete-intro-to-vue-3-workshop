@@ -15,7 +15,7 @@
         </ul>
         <ul v-else>
             <li v-for="character in characters">
-                {{ character.name }} - {{ character.title }} - {{ character.race }} - {{ character.age }} years old
+                {{ character.name }}<span v-if="character.title"> - {{ character.title }}</span> - {{ character.race }}<span v-if="character.age"> - {{ character.age }} years old</span>
             </li>
         </ul>
         <!-- Span characters' names, not putting comma after the last element.-->
@@ -29,16 +29,40 @@
         const { createApp } = Vue
         const showName = "World of Warcraft"
 
+        let calculatedAge = (minimumAgeYearsFromSource, sourcePostDate) => {
+            let now = new Date()
+            let yearsPassed = (now - new Date(sourcePostDate)) / (1000 * 60 * 60 * 24 * 365.25)
+            return Math.ceil(minimumAgeYearsFromSource + yearsPassed)
+        };
+
+        let calculateImaginaryNow = (imaginaryAgeYears, imaginaryDobFromSource) => {
+            // Provided there are 365/366 days in a year on both Earth and an imaginary world.
+            let date = new Date(imaginaryDobFromSource)
+            date.setFullYear(date.getFullYear() + imaginaryAgeYears)
+            return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+        }
+
+        // const imaginaryDobAlleriaFromSource = new Date('February 20, 473') // source (creation date unknown; non-canon): https://losteventidestudios.com/wow/index.php/Characters/AlleriaWindrunner
+        // const minimumAgeAlleriaYearsFromSource = 3000
+        // const realWorldDateWhenGivenAgeFromSource = new Date('December 2, 2025') // source edited (for the lack of creation date)
+        // let now = new Date()
+        // let yearsPassed = (now - realWorldDateWhenGivenAgeFromSource) / (1000 * 60 * 60 * 24 * 365.25) // convert milliseconds to years;
+        // let calculatedAgeAlleriaYears = Math.ceil(minimumAgeAlleriaYearsFromSource + yearsPassed);
+
+        // Should be 3001+
+        calculatedAgeAlleriaYears = calculatedAge(3000, 'December 2, 2025')
+
+        // Configuration object
         const app = createApp({
             data: () => ({
                 message: "Hello, it works!",
                 listOfNumbers: [1, 2, 3, 4, 5],
-                showName: showName,
+                showName: `${showName}, Azeroth time: ${calculateImaginaryNow(calculatedAgeAlleriaYears, 'February 20, 473')}` ,
                 characters: [
-                    {name: "Alleria Windrunner", title: null, race: "Void Elf", age: 3000},
-                    {name: "Sylvanas Windrunner", title: null, race: "Darkfallen / Banshee / Undead High Elf", age: 2800},
-                    {name: "Arator", title: "The Redeemer", race: "Half-Elf / Half-Human", age: 40},
-                    {name: "Turalyon", title: "High Exarch", race: "Human (Lightforged)", age: 40},
+                    {name: "Alleria Windrunner", title: null, race: "Void Elf", dob: 'February 20, 473', age: calculatedAgeAlleriaYears},
+                    {name: "Sylvanas Windrunner", title: null, race: "Darkfallen / Banshee / Undead High Elf", age: null}, // age 2800
+                    {name: "Arator", title: "The Redeemer", race: "Half-Elf / Half-Human", age: null}, // age 40
+                    {name: "Turalyon", title: "High Exarch", race: "Human (Lightforged)", age: null}, // age 40
                 ]
             })
 

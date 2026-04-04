@@ -7,7 +7,7 @@
     <title>Playground — Complete Intro to Vue 3</title>
   </head>
   <body style="background-color: black; color: white">
-    <h1> Hello, Frontend Masters!</h1>
+    <h1>Counter App</h1>
     <div id="app1">
         <p v-if="message.length % 2 === 0">Even: {{ message.toUpperCase()}}</p>
         <p v-else>Odd: {{ message}}</p>
@@ -19,6 +19,7 @@
     <script>
       const { createApp } = Vue
 
+      // Configuration object
       const app = createApp({
         data() {
           return {
