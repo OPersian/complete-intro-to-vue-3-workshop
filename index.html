@@ -20,40 +20,22 @@
         </ul>
         <!-- Span characters' names, not putting comma after the last element.-->
         <span v-for="(character, index) in characters">
-            {{ character.name }}{{index === characters.length - 1 ? '.' : ','}}
+            {{ character.name }}{{index === characters.length - 1 ? '.' : ', '}}
         </span>
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="./src/utils.js"></script>
+    <script src="./src/Character.js"></script>
+
     <script>
         const { createApp } = Vue
         const showName = "World of Warcraft"
 
-        let calculatedAge = (minimumAgeYearsFromSource, sourcePostDate) => {
-            let now = new Date()
-            let yearsPassed = (now - new Date(sourcePostDate)) / (1000 * 60 * 60 * 24 * 365.25)
-            return Math.ceil(minimumAgeYearsFromSource + yearsPassed)
-        };
-
-        let calculateFictionalNow = (fictionalDob, ageAtSourceDate, realWorldSourceDate) => {
-            // Fictional date at the real-world source date = DOB + age at that time
-            let fictionalRef = new Date(fictionalDob)
-            fictionalRef.setFullYear(fictionalRef.getFullYear() + ageAtSourceDate)
-            // Add real-world time elapsed since the source date
-            let msElapsed = new Date() - new Date(realWorldSourceDate)
-            let fictionalNow = new Date(fictionalRef.getTime() + msElapsed)
-            return fictionalNow.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
-        }
-
-        // const imaginaryDobAlleriaFromSource = new Date('February 20, 473') // source (creation date unknown; non-canon): https://losteventidestudios.com/wow/index.php/Characters/AlleriaWindrunner
-        // const minimumAgeAlleriaYearsFromSource = 3000
-        // const realWorldDateWhenGivenAgeFromSource = new Date('December 2, 2025') // source edited (for the lack of creation date)
-        // let now = new Date()
-        // let yearsPassed = (now - realWorldDateWhenGivenAgeFromSource) / (1000 * 60 * 60 * 24 * 365.25) // convert milliseconds to years;
-        // let calculatedAgeAlleriaYears = Math.ceil(minimumAgeAlleriaYearsFromSource + yearsPassed);
-
-        // Should be 3001+
-        calculatedAgeYearsAlleria = calculatedAge(3000, 'December 2, 2025')
+        const alleria = new Character("Alleria Windrunner", "Void Elf", null, 'February 20, 473', 3000, 'December 2, 2025', sources=["https://losteventidestudios.com/wow/index.php/Characters/AlleriaWindrunner"])
+        const sylvanas = new Character("Sylvanas Windrunner", "Darkfallen / Banshee / Undead High Elf", null, null, 2800, null)
+        const arator = new Character("Arator", "Half-Elf / Half-Human", "The Redeemer", null, 40, null)
+        const turalyon = new Character("Turalyon", "Human (Lightforged)", "High Exarch", null, 40, null)
 
         // Configuration object
         const app = createApp({
@@ -62,10 +44,10 @@
                 listOfNumbers: [1, 2, 3, 4, 5],
                 showName: `${showName}, Azeroth time: ${calculateFictionalNow('February 20, 473', 3000, 'December 2, 2025')}` ,
                 characters: [
-                    {name: "Alleria Windrunner", title: null, race: "Void Elf", dob: 'February 20, 473', age: calculatedAgeYearsAlleria},
-                    {name: "Sylvanas Windrunner", title: null, race: "Darkfallen / Banshee / Undead High Elf", age: null}, // age 2800
-                    {name: "Arator", title: "The Redeemer", race: "Half-Elf / Half-Human", age: null}, // age 40
-                    {name: "Turalyon", title: "High Exarch", race: "Human (Lightforged)", age: null}, // age 40
+                    {name: alleria.name, title: alleria.title, race: alleria.race, dob: alleria.fictionalDoB, age: alleria.age()},
+                    {name: sylvanas.name, title: sylvanas.title, race: sylvanas.race, dob: sylvanas.fictionalDoB, age: sylvanas.age()},
+                    {name: arator.name, title: arator.title, race: arator.race, dob: arator.fictionalDoB, age: arator.age()},
+                    {name: turalyon.name, title: turalyon.title, race: turalyon.race, dob: turalyon.fictionalDoB, age: turalyon.age()},
                 ]
             })
 
