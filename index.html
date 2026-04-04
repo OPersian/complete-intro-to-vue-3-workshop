@@ -9,12 +9,19 @@
 <body style="background-color: black; color: white">
     <div id="app">
         <h1> Hello, {{ showName.toUpperCase()}}</h1>
-        <ul v-if="characters.length > 0">
+        <!-- Place the most common scenario first (performance!).-->
+        <ul v-if="characters.length === 0">
+            No characters fetched.
+        </ul>
+        <ul v-else>
             <li v-for="character in characters">
                 {{ character.name }} - {{ character.title }} - {{ character.race }} - {{ character.age }} years old
             </li>
         </ul>
-        <ul v-else>No characters fetched.</ul>
+        <!-- Span characters' names, not putting comma after the last element.-->
+        <span v-for="(character, index) in characters">
+            {{ character.name }}{{index === characters.length - 1 ? '.' : ','}}
+        </span>
     </div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
