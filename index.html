@@ -15,12 +15,14 @@
         </ul>
         <ul v-else>
             <li v-for="character in characters">
-                {{ character.name }}<span v-if="character.title"> - {{ character.title }}</span> - {{ character.race }}<span v-if="character.age"> - {{ character.age }} years old</span>
+                {{ character.name }}<span v-if="character.title"> - {{ character.title }}</span> - {{ character.race }}<span v-if="character.age"> - {{ character.age() }} years old</span>
+                <button @click="populateFavoriteCharacters($event)" :data-key="character.id">Favorite</button>
             </li>
         </ul>
-        <!-- Span characters' names, not putting comma after the last element.-->
-        <span v-for="(character, index) in characters">
+        <!-- Span favorite characters' names, not putting comma after the last element.-->
+        <span v-for="(character, index) in favoriteCharacters">
             {{ character.name }}{{index === characters.length - 1 ? '.' : ', '}}
+            <!-- {{ character.name }}{{index === characters.length - 1 ? '.' : (index === 0 ? '': ', ')}} -->
         </span>
     </div>
 
@@ -32,24 +34,37 @@
         const { createApp } = Vue
         const showName = "World of Warcraft"
 
-        const alleria = new Character("Alleria Windrunner", "Void Elf", null, 'February 20, 473', 3000, 'December 2, 2025', sources=["https://losteventidestudios.com/wow/index.php/Characters/AlleriaWindrunner", "https://losteventidestudios.com/wow/index.php/Characters/SylvanasWindrunner"])
-        const sylvanas = new Character("Sylvanas Windrunner", "Darkfallen / Banshee / Undead High Elf", null, null, 2800, sources=["https://characterprofile.fandom.com/wiki/Sylvanas_Windrunner"])
-        const arator = new Character("Arator", "Half-Elf / Half-Human", "The Redeemer", null, 40, null)
-        const turalyon = new Character("Turalyon", "Human (Lightforged)", "High Exarch", null, 40, null)
+        const alleria = new Character(1, "Alleria Windrunner", "Void Elf", null, 'February 20, 473', 3000, 'December 2, 2025', sources=["https://losteventidestudios.com/wow/index.php/Characters/AlleriaWindrunner", "https://losteventidestudios.com/wow/index.php/Characters/SylvanasWindrunner"])
+        const sylvanas = new Character(2, "Sylvanas Windrunner", "Darkfallen / Banshee / Undead High Elf", null, null, 2800, sources=["https://characterprofile.fandom.com/wiki/Sylvanas_Windrunner"])
+        const vereesa = new Character(4, "Vereesa Windrunner", "High Elf", "Ranger-General of the Silver Covenant", "June 19, 529", null, sources=["https://losteventidestudios.com/wow/index.php/Characters/vereesaWindrunner"])
+        const arator = new Character(4, "Arator", "Half-Elf / Half-Human", "The Redeemer", null, 40, null)
+        const turalyon = new Character(5, "Turalyon", "Human (Lightforged)", "High Exarch", null, 40, null)
 
         // Configuration object
         const app = createApp({
             data: () => ({
                 message: "Hello, it works!",
-                listOfNumbers: [1, 2, 3, 4, 5],
                 showName: `${showName}, Azeroth time: ${calculateFictionalNow('February 20, 473', 3000, 'December 2, 2025')}` ,
-                characters: [
-                    {name: alleria.name, title: alleria.title, race: alleria.race, dob: alleria.fictionalDoB, age: alleria.age()},
-                    {name: sylvanas.name, title: sylvanas.title, race: sylvanas.race, dob: sylvanas.fictionalDoB, age: sylvanas.age()},
-                    {name: arator.name, title: arator.title, race: arator.race, dob: arator.fictionalDoB, age: arator.age()},
-                    {name: turalyon.name, title: turalyon.title, race: turalyon.race, dob: turalyon.fictionalDoB, age: turalyon.age()},
-                ]
-            })
+                characters: [alleria, sylvanas, vereesa, arator, turalyon],
+                favoriteCharacters: []
+            }),
+            methods: {
+                populateFavoriteCharacters(event) {
+                    let character
+                    for (const ch of this.characters) {
+                        if (ch.id == event.target.dataset.key) {
+                            character = ch
+                            break
+                        }
+                    }
+                    if (character) {
+                        // NOTE: consider checking for duplicates
+                        this.favoriteCharacters.push(character);
+                    } else {
+                        throw new Error(`Cannot find a character with id ${event.target.dataset.key}`)
+                    }
+                }
+            }
 
         })
 

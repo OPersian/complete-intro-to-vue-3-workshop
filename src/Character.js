@@ -1,6 +1,7 @@
 class Character {
 
-    constructor(name, race, title = null, fictionalDoB = null, minimalAge = null, sourcePostDate = null, sources = null) {
+    constructor(id, name, race, title = null, fictionalDoB = null, minimalAge = null, sourcePostDate = null, sources = null) {
+        this.id = id;
         this.name = name;
         this.race = race;
         this.title = title;
