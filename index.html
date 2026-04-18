@@ -9,6 +9,19 @@
 <body style="background-color: black; color: white">
     <div id="app">
         <h1> Hello, {{ showName.toUpperCase()}}</h1>
+
+        <div>
+            <p>Create new character</p>
+
+            <form @submit.prevent="createNewCharacter">
+                <input type="text" placeholder="Name" v-model="newCharacterName" />
+                <input type="text" placeholder="Race" v-model="newCharacterRace" />
+                <button type="submit">Add</button>
+
+            </form>
+
+        </div>
+
         <!-- Place the most common scenario first (performance!).-->
         <ul v-if="characters.length === 0">
             No characters fetched.
@@ -36,7 +49,7 @@
 
         const alleria = new Character(1, "Alleria Windrunner", "Void Elf", null, 'February 20, 473', 3000, 'December 2, 2025', sources=["https://losteventidestudios.com/wow/index.php/Characters/AlleriaWindrunner", "https://losteventidestudios.com/wow/index.php/Characters/SylvanasWindrunner"])
         const sylvanas = new Character(2, "Sylvanas Windrunner", "Darkfallen / Banshee / Undead High Elf", null, null, 2800, sources=["https://characterprofile.fandom.com/wiki/Sylvanas_Windrunner"])
-        const vereesa = new Character(4, "Vereesa Windrunner", "High Elf", "Ranger-General of the Silver Covenant", "June 19, 529", null, sources=["https://losteventidestudios.com/wow/index.php/Characters/vereesaWindrunner"])
+        const vereesa = new Character(3, "Vereesa Windrunner", "High Elf", "Ranger-General of the Silver Covenant", "June 19, 529", null, sources=["https://losteventidestudios.com/wow/index.php/Characters/vereesaWindrunner"])
         const arator = new Character(4, "Arator", "Half-Elf / Half-Human", "The Redeemer", null, 40, null)
         const turalyon = new Character(5, "Turalyon", "Human (Lightforged)", "High Exarch", null, 40, null)
 
@@ -46,7 +59,9 @@
                 message: "Hello, it works!",
                 showName: `${showName}, Azeroth time: ${calculateFictionalNow('February 20, 473', 3000, 'December 2, 2025')}` ,
                 characters: [alleria, sylvanas, vereesa, arator, turalyon],
-                favoriteCharacters: []
+                favoriteCharacters: [],
+                newCharacterName: "",
+                newCharacterRace: ""
             }),
             methods: {
                 populateFavoriteCharacters(event) {
@@ -58,10 +73,31 @@
                         }
                     }
                     if (character) {
-                        // NOTE: consider checking for duplicates
+                        // NOTE: consider checking for duplicates (deduping)
                         this.favoriteCharacters.push(character);
                     } else {
                         throw new Error(`Cannot find a character with id ${event.target.dataset.key}`)
+                    }
+                },
+                createNewCharacter() {
+                    // Only create if both name and race are provided
+                    if (this.newCharacterName.trim() && this.newCharacterRace.trim()) {
+                        // Generate a new ID (using the highest current ID + 1)
+                        const newId = Math.max(...this.characters.map(ch => ch.id)) + 1
+
+                        // Create new character with minimal required fields
+                        const newCharacter = new Character(
+                            newId,
+                            this.newCharacterName,
+                            this.newCharacterRace
+                        )
+
+                        // Add to characters array (Vue will reactively update the display)
+                        this.characters.push(newCharacter)
+
+                        // Clear the form
+                        this.newCharacterName = ""
+                        this.newCharacterRace = ""
                     }
                 }
             }
