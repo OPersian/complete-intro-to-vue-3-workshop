@@ -29,7 +29,7 @@
         <ul v-else>
             <li v-for="character in characters">
                 {{ character.name }}<span v-if="character.title"> - {{ character.title }}</span> - {{ character.race }}<span v-if="character.age"> - {{ character.age() }} years old</span>
-                <button @click="populateFavoriteCharacters($event)" :data-key="character.id">Favorite</button>
+                <button @click="favoriteCharacter(character)">Favorite</button>
             </li>
         </ul>
         <!-- Span favorite characters' names, not putting comma after the last element.-->
@@ -64,20 +64,9 @@
                 newCharacterRace: ""
             }),
             methods: {
-                populateFavoriteCharacters(event) {
-                    let character
-                    for (const ch of this.characters) {
-                        if (ch.id == event.target.dataset.key) {
-                            character = ch
-                            break
-                        }
-                    }
-                    if (character) {
-                        // NOTE: consider checking for duplicates (deduping)
-                        this.favoriteCharacters.push(character);
-                    } else {
-                        throw new Error(`Cannot find a character with id ${event.target.dataset.key}`)
-                    }
+                favoriteCharacter(character) {
+                    // NOTE: consider checking for duplicates (deduping)
+                    this.favoriteCharacters.push(character);
                 },
                 createNewCharacter() {
                     // Only create if both name and race are provided
