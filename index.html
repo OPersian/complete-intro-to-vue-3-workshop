@@ -14,8 +14,8 @@
             <p>Create new character</p>
 
             <form @submit.prevent="createNewCharacter">
-                <input type="text" placeholder="Name" v-model="newCharacterName" />
-                <input type="text" placeholder="Race" v-model="newCharacterRace" />
+                <input type="text" placeholder="Name" v-model="newCharacter.name" />
+                <input type="text" placeholder="Race" v-model="newCharacter.race" />
                 <button type="submit">Add</button>
 
             </form>
@@ -60,8 +60,10 @@
                 showName: `${showName}, Azeroth time: ${calculateFictionalNow('February 20, 473', 3000, 'December 2, 2025')}` ,
                 characters: [alleria, sylvanas, vereesa, arator, turalyon],
                 favoriteCharacters: [],
-                newCharacterName: "",
-                newCharacterRace: ""
+                newCharacter: {
+                    name: "",
+                    race: "",
+                }
             }),
             methods: {
                 favoriteCharacter(character) {
@@ -69,24 +71,10 @@
                     this.favoriteCharacters.push(character);
                 },
                 createNewCharacter() {
-                    // Only create if both name and race are provided
-                    if (this.newCharacterName.trim() && this.newCharacterRace.trim()) {
-                        // Generate a new ID (using the highest current ID + 1)
-                        const newId = Math.max(...this.characters.map(ch => ch.id)) + 1
-
-                        // Create new character with minimal required fields
-                        const newCharacter = new Character(
-                            newId,
-                            this.newCharacterName,
-                            this.newCharacterRace
-                        )
-
-                        // Add to characters array (Vue will reactively update the display)
-                        this.characters.push(newCharacter)
-
-                        // Clear the form
-                        this.newCharacterName = ""
-                        this.newCharacterRace = ""
+                    this.characters.push(this.newCharacter)
+                    this.newCharacter = {
+                        name: "",
+                        race: "",
                     }
                 }
             }
